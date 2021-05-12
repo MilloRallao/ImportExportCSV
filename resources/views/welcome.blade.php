@@ -1,16 +1,39 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
-        <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta http-equiv="Content-type" content="text/html"; charset="utf-8" />
         <title>Artículos</title>
 
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+
+        <style>
+            table {
+                text-align: left;
+                position: relative;
+                border-collapse: collapse;
+            }
+            th {
+                background: white;
+                position: sticky;
+                top: 0; /* Don't forget this, required for the stickiness */
+                box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.4);
+            }
+        </style>
     </head>
 
     <body>
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
 
     <div class="container mt-5 text-center">
         <form action="{{ route('import') }}" method="POST" enctype="multipart/form-data">
@@ -54,7 +77,7 @@
             </thead>
             <tbody>
                 @foreach($articulos as $articulo)
-                    <tr>
+                    <tr id="fila{{ $articulo->id }}">
                         <td>
                             @isset($articulo->RUTA_IMAGENES)
                                 @foreach($articulo->RUTA_IMAGENES as $imagen)
@@ -85,8 +108,8 @@
                                 <div class="form-group mb-5" style="max-width: 200px; margin: 0 auto;">
                                     <div class="custom-file text-left">
                                         <input id="id_articulo" name="id_articulo" type="hidden" value="{{ $articulo->id }}">
-                                        <input type="file" name="imageFile[]" class="custom-file-input" id="customFile" multiple="multiple">
-                                        <label class="custom-file-label" for="customFile">Browse images</label>
+                                        <input type="file" name="imageFile[]" class="custom-file-input" id="imagenes" multiple="multiple">
+                                        <label class="custom-file-label" for="imagenes">Browse images</label>
                                     </div>
                                 </div>
                                 <button class="btn btn-danger">Click to upload</button>
@@ -104,5 +127,16 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.21/js/dataTables.bootstrap4.min.js"></script>
+
+<script>
+    $(function(){
+        $(document).on('click', '#imagenes', function(){
+            var id_articulo = $(this).siblings().val();
+            console.log(id_articulo);
+            $('tr').removeAttr('style');
+            $('#fila'+id_articulo).css('background-color', 'aliceblue');
+        });
+    });
+</script>
 
 </html>

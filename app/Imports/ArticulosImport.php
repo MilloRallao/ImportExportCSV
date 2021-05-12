@@ -16,7 +16,7 @@ class ArticulosImport implements ToModel, WithHeadingRow, WithCustomCsvSettings
     */
     public function model(array $row)
     {
-        //dd($row);
+        //dd(json_decode($row['ruta_de_las_imágenes']));
         return new Articulo([
             'NOMBRE_GUANXE' => $row['nombre_guanxe'],
             'NOMBRE_COMERCIAL' => $row['nombre_comercial'],
@@ -34,7 +34,7 @@ class ArticulosImport implements ToModel, WithHeadingRow, WithCustomCsvSettings
             'CATEGORIA' => $row['categoria'],
             'CATEGORIA_POR_DEFECTO' => $row['categoria_por_defecto'],
             'MARCA_FABRICANTE' => $row['marca_fabricante'],
-            //'RUTA_IMAGENES' => $row['ruta_de_las_imagenes'],
+            'RUTA_IMAGENES' => $row['ruta_de_las_imágenes'],
             'ESTADO' => $row['estado'],
         ]);
     }

@@ -97,7 +97,7 @@ return [
         | ignored by enabling the setting ignore_empty to true.
         |
         */
-        'ignore_empty' => false,
+        'ignore_empty' => true,
 
         /*
         |--------------------------------------------------------------------------
@@ -125,7 +125,7 @@ return [
             'enclosure'        => '"',
             'escape_character' => '\\',
             'contiguous'       => false,
-            'input_encoding'   => 'windows-1252',
+            'input_encoding'   => 'ISO-8859-1',
         ],
 
         /*
