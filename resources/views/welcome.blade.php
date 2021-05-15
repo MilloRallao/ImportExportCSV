@@ -7,21 +7,14 @@
 
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
 
-        <style>
-            table {
-                text-align: left;
-                position: relative;
-                border-collapse: collapse;
-            }
-            th {
-                background: white;
-                position: sticky;
-                top: 0; /* Don't forget this, required for the stickiness */
-                box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.4);
-            }
-        </style>
+        <!-- Styles -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/dataTables.bootstrap5.min.css">
+        <link rel="stylesheet" href="https://cdn.datatables.net/fixedheader/3.1.8/css/fixedHeader.dataTables.min.css">
+        <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.7/css/responsive.dataTables.min.css">
+
+
     </head>
 
     <body>
@@ -51,15 +44,15 @@
 
     <div class="container-fluid mt-5">
         <h2 class="mb-4 text-center">Artículos</h2>
-        <table class="table table-bordered">
+        <table id="table" class="table table-bordered">
             <thead>
                 <tr>
                     <th>IMAGEN</th>
                     <th>NOMBRE GUANXE</th>
                     <th>NOMBRE COMERCIAL</th>
                     <th>REFERENCIA COMERCIAL</th>
-                    <th>REFERENCIA</th>
-                    <th>REFERENCIA COMBINACION</th>
+{{--                    <th>REFERENCIA</th>--}}
+{{--                    <th>REFERENCIA COMBINACION</th>--}}
                     <th>GENERO</th>
                     <th>COLOR</th>
                     <th>TALLA</th>
@@ -88,8 +81,8 @@
                         <td>{{ $articulo->NOMBRE_GUANXE }}</td>
                         <td>{{ $articulo->NOMBRE_COMERCIAL }}</td>
                         <td>{{ $articulo->REFERENCIA_COMERCIAL }}</td>
-                        <td>{{ $articulo->REFERENCIA }}</td>
-                        <td>{{ $articulo->REFERENCIA_COMBINACION }}</td>
+{{--                        <td>{{ $articulo->REFERENCIA }}</td>--}}
+{{--                        <td>{{ $articulo->REFERENCIA_COMBINACION }}</td>--}}
                         <td>{{ $articulo->GENERO }}</td>
                         <td>{{ $articulo->COLOR }}</td>
                         <td>{{ $articulo->TALLA }}</td>
@@ -105,11 +98,10 @@
                         <td>
                             <form action="{{ route('upload') }}" method="POST" enctype="multipart/form-data">
                                 @csrf
-                                <div class="form-group mb-5" style="max-width: 200px; margin: 0 auto;">
+                                <div class="form-group mb-5" style="margin: 0 auto;">
                                     <div class="custom-file text-left">
                                         <input id="id_articulo" name="id_articulo" type="hidden" value="{{ $articulo->id }}">
                                         <input type="file" name="imageFile[]" class="custom-file-input" id="imagenes" multiple="multiple">
-                                        <label class="custom-file-label" for="imagenes">Browse images</label>
                                     </div>
                                 </div>
                                 <button class="btn btn-danger">Click to upload</button>
@@ -123,13 +115,44 @@
 
     </body>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/fixedheader/3.1.8/js/dataTables.fixedHeader.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.2.7/js/dataTables.responsive.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
-    <script src="https://cdn.datatables.net/1.10.21/js/dataTables.bootstrap4.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.24/js/dataTables.bootstrap5.min.js"></script>
 
 <script>
     $(function(){
+        $(document).ready(function() {
+            $('#table').DataTable({
+                autoWidth: true,
+                fixedHeader: true,
+                lengthChange: true, //Permitir cambiar ancho columnas7
+                responsive: {
+                    details: false
+                },
+                "order": [],
+                columns: [
+                    { orderable: false },
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    { orderable: false },
+                ]
+            });
+        } );
+
         $(document).on('click', '#imagenes', function(){
             var id_articulo = $(this).siblings().val();
             console.log(id_articulo);

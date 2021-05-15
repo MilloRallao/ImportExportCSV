@@ -34,7 +34,7 @@ class ArticulosImport implements ToModel, WithHeadingRow, WithCustomCsvSettings
             'CATEGORIA' => $row['categoria'],
             'CATEGORIA_POR_DEFECTO' => $row['categoria_por_defecto'],
             'MARCA_FABRICANTE' => $row['marca_fabricante'],
-            'RUTA_IMAGENES' => $row['ruta_de_las_imágenes'],
+//            'RUTA_IMAGENES' => $row['ruta_de_las_imágenes'],
             'ESTADO' => $row['estado'],
         ]);
     }

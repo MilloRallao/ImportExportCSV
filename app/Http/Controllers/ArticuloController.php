@@ -14,73 +14,76 @@ class ArticuloController extends Controller
 
     public function importFile(Request $request)
     {
+        set_time_limit(600);
+
         $request->validate([
-            'file' => 'required',
-            'file' => 'mimes:csv'
+            'file' => 'required|mimes:csv,txt'
         ]);
 
         //dd($request->file('file'));
         //Excel::import(new ArticulosImport(), $request->file('file')->store('temp'), null, \Maatwebsite\Excel\Excel::CSV);
 
         if ($request->hasFile('file')) {
-            $articulos = Excel::toCollection(new ArticulosImport, $request->file('file'), null, \Maatwebsite\Excel\Excel::CSV);
+            Articulo::truncate();
+            Excel::import(new ArticulosImport, $request->file('file'), null, \Maatwebsite\Excel\Excel::CSV);
 
-            if ($articulos[0]) {
-                //dd($articulos[0]);
-                foreach ($articulos[0] as $articulo) {
-                    if (isset($articulo['inombre_guanxe'])) {
-                        //dd(explode(',', $articulo['ruta_de_las_imagenes']));
-                        //Comprobar si hay valores nuevos que insertar, si no, actualizar
-                        DB::table('articulos')
-                            ->updateOrInsert(
-                                ['REFERENCIA_COMERCIAL' => $articulo['referencia_comercial']],
-                                [
-                                    'NOMBRE_GUANXE' => $articulo['inombre_guanxe'],
-                                    'NOMBRE_COMERCIAL' => $articulo['nombre_comercial'],
-                                    'REFERENCIA_COMERCIAL' => $articulo['referencia_comercial'],
-                                    'REFERENCIA' => $articulo['referencia'],
-                                    'REFERENCIA_COMBINACION' => $articulo['referencia_combinacion'],
-                                    'GENERO' => $articulo['genero'],
-                                    'COLOR' => $articulo['color'],
-                                    'TALLA' => $articulo['talla'],
-                                    'STOCK' => $articulo['stock'],
-                                    'PRECIO_BASE' => $articulo['precio_base'],
-                                    'DESCRIPCION_LARGA' => $articulo['descripcion_larga'],
-                                    'DESCRIPCION_CORTA' => $articulo['descripcion_corta'],
-                                    'CATEGORIA' => $articulo['categoria'],
-                                    'CATEGORIA_POR_DEFECTO' => $articulo['categoria_por_defecto'],
-                                    'MARCA_FABRICANTE' => $articulo['marca_fabricante'],
-                                    'RUTA_IMAGENES' => empty($articulo['ruta_de_las_imagenes']) ? null : json_encode(explode(',', $articulo['ruta_de_las_imagenes'])),
-                                    'ESTADO' => $articulo['estado'],
-                                ]
-                            );
-                    } else {
-                        //Comprobar si hay valores nuevos que insertar, si no, actualizar
-                        DB::table('articulos')
-                            ->updateOrInsert(
-                                ['REFERENCIA_COMERCIAL' => $articulo['referencia_comercial']],
-                                [
-                                    'NOMBRE_GUANXE' => $articulo['nombre_guanxe'],
-                                    'NOMBRE_COMERCIAL' => $articulo['nombre_comercial'],
-                                    'REFERENCIA_COMERCIAL' => $articulo['referencia_comercial'],
-                                    'REFERENCIA' => $articulo['referencia'],
-                                    'REFERENCIA_COMBINACION' => $articulo['referencia_combinacion'],
-                                    'GENERO' => $articulo['genero'],
-                                    'COLOR' => $articulo['color'],
-                                    'TALLA' => $articulo['talla'],
-                                    'STOCK' => $articulo['stock'],
-                                    'PRECIO_BASE' => $articulo['precio_base'],
-                                    'DESCRIPCION_LARGA' => $articulo['descripcion_larga'],
-                                    'DESCRIPCION_CORTA' => $articulo['descripcion_corta'],
-                                    'CATEGORIA' => $articulo['categoria'],
-                                    'CATEGORIA_POR_DEFECTO' => $articulo['categoria_por_defecto'],
-                                    'MARCA_FABRICANTE' => $articulo['marca_fabricante'],
-                                    'ESTADO' => $articulo['estado'],
-                                ]
-                            );
-                    }
-                }
-            }
+
+//            if ($articulos[0]) {
+//                //dd($articulos[0]);
+//                foreach ($articulos[0] as $articulo) {
+//                    if (isset($articulo['inombre_guanxe'])) {
+//                        //dd(explode(',', $articulo['ruta_de_las_imagenes']));
+//                        //Comprobar si hay valores nuevos que insertar, si no, actualizar
+//                        DB::table('articulos')
+//                            ->updateOrInsert(
+//                                ['REFERENCIA_COMERCIAL' => $articulo['referencia_comercial']],
+//                                [
+//                                    'NOMBRE_GUANXE' => $articulo['inombre_guanxe'],
+//                                    'NOMBRE_COMERCIAL' => $articulo['nombre_comercial'],
+//                                    'REFERENCIA_COMERCIAL' => $articulo['referencia_comercial'],
+//                                    'REFERENCIA' => $articulo['referencia'],
+//                                    'REFERENCIA_COMBINACION' => $articulo['referencia_combinacion'],
+//                                    'GENERO' => $articulo['genero'],
+//                                    'COLOR' => $articulo['color'],
+//                                    'TALLA' => $articulo['talla'],
+//                                    'STOCK' => $articulo['stock'],
+//                                    'PRECIO_BASE' => $articulo['precio_base'],
+//                                    'DESCRIPCION_LARGA' => $articulo['descripcion_larga'],
+//                                    'DESCRIPCION_CORTA' => $articulo['descripcion_corta'],
+//                                    'CATEGORIA' => $articulo['categoria'],
+//                                    'CATEGORIA_POR_DEFECTO' => $articulo['categoria_por_defecto'],
+//                                    'MARCA_FABRICANTE' => $articulo['marca_fabricante'],
+//                                    'RUTA_IMAGENES' => empty($articulo['ruta_de_las_imagenes']) ? null : json_encode(explode(',', $articulo['ruta_de_las_imagenes'])),
+//                                    'ESTADO' => $articulo['estado'],
+//                                ]
+//                            );
+//                    } else {
+//                        //Comprobar si hay valores nuevos que insertar, si no, actualizar
+//                        DB::table('articulos')
+//                            ->updateOrInsert(
+//                                ['REFERENCIA_COMERCIAL' => $articulo['referencia_comercial']],
+//                                [
+//                                    'NOMBRE_GUANXE' => $articulo['nombre_guanxe'],
+//                                    'NOMBRE_COMERCIAL' => $articulo['nombre_comercial'],
+//                                    'REFERENCIA_COMERCIAL' => $articulo['referencia_comercial'],
+//                                    'REFERENCIA' => $articulo['referencia'],
+//                                    'REFERENCIA_COMBINACION' => $articulo['referencia_combinacion'],
+//                                    'GENERO' => $articulo['genero'],
+//                                    'COLOR' => $articulo['color'],
+//                                    'TALLA' => $articulo['talla'],
+//                                    'STOCK' => $articulo['stock'],
+//                                    'PRECIO_BASE' => $articulo['precio_base'],
+//                                    'DESCRIPCION_LARGA' => $articulo['descripcion_larga'],
+//                                    'DESCRIPCION_CORTA' => $articulo['descripcion_corta'],
+//                                    'CATEGORIA' => $articulo['categoria'],
+//                                    'CATEGORIA_POR_DEFECTO' => $articulo['categoria_por_defecto'],
+//                                    'MARCA_FABRICANTE' => $articulo['marca_fabricante'],
+//                                    'ESTADO' => $articulo['estado'],
+//                                ]
+//                            );
+//                    }
+//                }
+//            }
         }
 
         return back();
@@ -88,9 +91,9 @@ class ArticuloController extends Controller
 
     public function exportFile()
     {
+        set_time_limit(600);
 //        $contents = Excel::raw(new ArticulosExport(), \Maatwebsite\Excel\Excel::CSV);
 
-//
 //        ob_end_clean();
 //        ob_start();
 
@@ -103,41 +106,76 @@ class ArticuloController extends Controller
 
     public function uploadImages(Request $request)
     {
+        set_time_limit(600);
+        // Validar request
         $request->validate([
             'imageFile' => 'required',
             'imageFile.*' => 'mimes:jpeg,jpg,png|max:2048'
         ]);
 
+        // Diferentes colores de los productos con la misma referencia que el artículo inicial original
+//        $colores = Articulo::where('REFERENCIA', $referencia)->distinct()->pluck('COLOR');
+
+        // Artículo inicial original
         $articulo = Articulo::find($request->id_articulo);
-        $color = $articulo->COLOR;
+
+        // Referencia del artículo inicial original
         $referencia = $articulo->REFERENCIA;
 
-        $articulos = Articulo::where('COLOR', $color)->where('REFERENCIA', $referencia)->get();
+        // Color del artículo inicial original
+        $color = $articulo->COLOR;
 
-        $count = 0;
+        // Todos los artículos con la misma referencia que el artículo inicial original
+        $articulos = Articulo::where('REFERENCIA', $referencia)->get();
 
+        // Todos los artículos con la misma referencia y color que el artículo inicial original
+        $articulosColor = Articulo::where('REFERENCIA', $referencia)->where('COLOR', $color)->get();
+
+        // Contador de imágenes
+        $countImages = 0;
+
+        // Si existen imágenes
         if ($request->hasfile('imageFile')) {
+            // Recorrer cada imagen y guardarla en un array
             foreach ($request->file('imageFile') as $file) {
-                //$name = $file->getClientOriginalName();
-                $count++;
-                $name = str_replace([' ', '-'], '', substr($articulo->REFERENCIA_COMERCIAL, 4, 15)) . '-' . $articulo->COLOR . '-' . $count . '.' . $file->getClientOriginalExtension();
-                $ruta = '/img/' . str_replace([' ', '-'], '', substr($articulo->REFERENCIA_COMERCIAL, 4, 15)) . '-' . $articulo->COLOR . '-' . $count . '.' . $file->getClientOriginalExtension();
+                $countImages++;
+
+                // Nombre de cada imagen
+                $name = str_replace([' ', '-'], '', substr($articulo->REFERENCIA_COMERCIAL, 4, 15)) . '-' . $countImages . '.' . $file->getClientOriginalExtension();
+
+                // Rutas de las imágenes
+                $imgsData[] = '/img/' . str_replace([' ', '-'], '', substr($articulo->REFERENCIA_COMERCIAL, 4, 15)) . '-' . $countImages . '.' . $file->getClientOriginalExtension();
+
+                // Guardar cada imagen en carpeta /public/img
                 $file->move(public_path('img'), $name);
-                if ($count == 1) {
-                    $imgData[] = $ruta;
-                } else {
-                    $imgData[] = ' ' . $ruta;
+            }
+        }
+
+        // Cuando se suban más de 3 imágenes, se aplicará el método de subida masiva de imágenes de manera automática, separando las imágenes por grupos según los colores de un mismo artículo
+        if ($countImages > 3) {
+            // Separar el array contenedor de todas las imágenes en múltiples arrays de 3 posiciones (3 imágenes por artículo)
+            $newImgsData = array_chunk($imgsData, 3);
+
+            // Numero de arrays de 3 imágenes
+            $newImgsDataNumber = count($newImgsData);
+
+            // Separar la colección de todos los artículos de una misma referencia en varias colecciones de 6 artículos (6 tallas por artículo)
+            $newArticulos = $articulos->chunk(6);
+
+            // Cantidad de arrays de artículos agrupados cada 6 tallas
+            $newArticulosNumber = count($newArticulos);
+
+            for ($i = 0; $i < $newImgsDataNumber; $i++) {
+                // Recorrer cada grupo de 6 artículos para sacar sus colecciones y guardar en cada coleccion las rutas de las 3 imágenes correspondientes
+                foreach ($newArticulos[$i] as $newArticulo) {
+                    $newArticulo->RUTA_IMAGENES = $newImgsData[$i];
+                    $newArticulo->save();
                 }
             }
-            foreach ($articulos as $item) {
-                //$imgDataEncode = json_encode($imgData);
-                //dd(json_encode($imgData));
-
-                $item->RUTA_IMAGENES = $imgData;
-
-                //dd(json_decode($imgDataEncode));
-
-                $item->save();
+        } elseif ($countImages <= 3) { // Cuando se suban 3 o menos imágenes, se aplicará el método de suba manual de imágenes, asignando el grupo de imágenes a un determinado artículo de un único color
+            foreach ($articulosColor as $articuloColor){
+                $articuloColor->RUTA_IMAGENES = $imgsData;
+                $articuloColor->save();
             }
         }
 
